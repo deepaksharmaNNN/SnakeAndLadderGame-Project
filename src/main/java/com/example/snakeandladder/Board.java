@@ -27,4 +27,12 @@ public class Board {
             }
         }
     }
+    int getXCoordinates(int position){
+        if(position >= 1 && position <= 100) return positionCoordination.get(position).getKey();
+        return -1;
+    }
+    int getYCoordinates(int position){
+        if(position >= 1 && position <= 100) return positionCoordination.get(position).getValue();
+        return -1;
+    }
 }

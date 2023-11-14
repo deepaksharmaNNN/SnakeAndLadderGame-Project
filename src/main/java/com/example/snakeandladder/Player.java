@@ -1,0 +1,39 @@
+package com.example.snakeandladder;
+
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+
+public class Player {
+    private Circle coin;
+    private int currentPosition;
+    private String name;
+    private static Board gameBoard = new Board();
+    public Player(int tileSize, Color coinColor, String playerName){
+        coin = new Circle(tileSize/2);
+        coin.setFill(coinColor);
+        currentPosition = 1;
+        name = playerName;
+    }
+    public void movePlayer(int diceValue){
+        if(currentPosition + diceValue <= 100) currentPosition += diceValue;
+
+        int x = gameBoard.getXCoordinates(currentPosition);
+        int y = gameBoard.getYCoordinates(currentPosition);
+
+        coin.setTranslateX(x);
+        coin.setTranslateY(y);
+
+    }
+
+    public Circle getCoin() {
+        return coin;
+    }
+
+    public int getCurrentPosition() {
+        return currentPosition;
+    }
+
+    public String getName() {
+        return name;
+    }
+}
