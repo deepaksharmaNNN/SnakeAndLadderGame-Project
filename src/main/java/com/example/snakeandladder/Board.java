@@ -6,8 +6,38 @@ import java.util.ArrayList;
 
 public class Board {
     ArrayList<Pair<Integer,Integer>> positionCoordination;
+    ArrayList<Integer> snakeLadderPosition;
     public Board(){
         positionCoordination = new ArrayList<>();
+        populatePositionCoordinates();
+        populateSnakeladder();
+    }
+    public int getNewPosition(int currentPosition){
+        if (currentPosition >= 0 && currentPosition <= 100) {
+            return snakeLadderPosition.get(currentPosition);
+        }
+        return -1;
+    }
+    private void populateSnakeladder(){
+        snakeLadderPosition = new ArrayList<>();
+        for (int i = 0; i < 101; i++) {
+            snakeLadderPosition.add(i);
+        }
+        snakeLadderPosition.add(4,25);
+        snakeLadderPosition.add(27,5);
+        snakeLadderPosition.add(33,49);
+        snakeLadderPosition.add(40,3);
+        snakeLadderPosition.add(42,63);
+        snakeLadderPosition.add(43,18);
+        snakeLadderPosition.add(50,69);
+        snakeLadderPosition.add(54,31);
+        snakeLadderPosition.add(62,81);
+        snakeLadderPosition.add(66,45);
+        snakeLadderPosition.add(76,58);
+        snakeLadderPosition.add(74,92);
+        snakeLadderPosition.add(89,53);
+        snakeLadderPosition.add(99,41);
+
     }
     private void populatePositionCoordinates(){
         positionCoordination.add(new Pair<>(0,0));//dummy value
