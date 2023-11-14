@@ -1,8 +1,6 @@
 package com.example.snakeandladder;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -12,8 +10,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-
-import java.io.IOException;
 
 public class SnakeLadder extends Application {
 
@@ -55,20 +51,17 @@ public class SnakeLadder extends Application {
         Button playerOneButton = new Button("Player One");
         playerOneButton.setTranslateX(20);
         playerOneButton.setTranslateY(yLine);
-        playerOneButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                if(gameStart){
-                    if(turnOnePlayer){
-                        getDiceValue();
-                        playerOne.movePlayer(diceValue);
-                        playerOne.playerAtSnakeOrLadder();
-                        turnOnePlayer = false;
-                        turnTwoPlayer = true;
-                    }
+        playerOneButton.setOnAction(actionEvent -> {
+            if(gameStart){
+                if(turnOnePlayer){
+                    getDiceValue();
+                    playerOne.movePlayer(diceValue);
+                    playerOne.playerAtSnakeOrLadder();
+                    turnOnePlayer = false;
+                    turnTwoPlayer = true;
                 }
-
             }
+
         });
 
         Button gameButton = new Button("Start Game");
@@ -78,20 +71,17 @@ public class SnakeLadder extends Application {
         Button playerTwoButton = new Button("Player Two");
         playerTwoButton.setTranslateX(300);
         playerTwoButton.setTranslateY(yLine);
-        playerTwoButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                if(gameStart){
-                    if(turnTwoPlayer){
-                        getDiceValue();
-                        playerTow.movePlayer(diceValue);
-                        playerTow.playerAtSnakeOrLadder();
-                        turnOnePlayer = true;
-                        turnTwoPlayer = false;
-                    }
+        playerTwoButton.setOnAction(actionEvent -> {
+            if(gameStart){
+                if(turnTwoPlayer){
+                    getDiceValue();
+                    playerTow.movePlayer(diceValue);
+                    playerTow.playerAtSnakeOrLadder();
+                    turnOnePlayer = true;
+                    turnTwoPlayer = false;
                 }
-
             }
+
         });
 
         playerOne = new Player(tileSize, Color.BLACK);
@@ -121,7 +111,7 @@ public class SnakeLadder extends Application {
     }
 
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage) {
         Scene scene = new Scene(createContent());
         stage.setTitle("Snake and Ladder");
         stage.setScene(scene);

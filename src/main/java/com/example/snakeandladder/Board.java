@@ -33,7 +33,7 @@ public class Board {
 
     private static void populatePositionCoordinates() {
         positionCoordinates = new ArrayList<>();
-        positionCoordinates.add(new Pair<Integer, Integer>(20, 380));
+        positionCoordinates.add(new Pair<>(20, 380));
         //20, 380
         int xTilePos, yTilePos;
         for (int i = height - 1; i >= 0; i--) {
@@ -45,7 +45,7 @@ public class Board {
                 }
 
                 yTilePos = tileSize / 2 + i * tileSize;
-                positionCoordinates.add(new Pair<Integer, Integer>(xTilePos, yTilePos));
+                positionCoordinates.add(new Pair<>(xTilePos, yTilePos));
             }
 
         }

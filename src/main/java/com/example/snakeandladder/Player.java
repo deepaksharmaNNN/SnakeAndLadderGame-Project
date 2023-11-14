@@ -6,7 +6,7 @@ import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 
 public class Player {
-    private Circle gamePiece;
+    public Circle gamePiece;
     int xPosition;
     int yPosition;
     int currentPiecePosition;
@@ -18,7 +18,7 @@ public class Player {
         this.xPosition = gameBoard.getXValue(currentPiecePosition);
         this.yPosition = gameBoard.getYValue(currentPiecePosition);
 
-        gamePiece = new Circle(tileSize/2);
+        gamePiece = new Circle((double) tileSize /2);
         gamePiece.setFill(pieceColor);
         gamePiece.setTranslateX(this.xPosition);
         gamePiece.setTranslateY(this.yPosition);
@@ -43,8 +43,6 @@ public class Player {
         animate.setAutoReverse(false);
         animate.play();
 
-//        gamePiece.setTranslateX(this.xPosition);
-//        gamePiece.setTranslateY(this.yPosition);
     }
 
     public void playerAtSnakeOrLadder(){
