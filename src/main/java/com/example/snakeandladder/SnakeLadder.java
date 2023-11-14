@@ -1,12 +1,15 @@
 package com.example.snakeandladder;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -15,8 +18,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class SnakeLadder extends Application {
-    public static final int tileSize = 40 , height = 10 , width = 10;
+    public static final int tileSize = 60 , height = 10 , width = 10;
     public static final int buttonLine = height*tileSize + 50 , infoLine = buttonLine - 30;
+    private static Dice dice = new Dice();
+    private Player playerOne,playerTwo;
+    private boolean gameStarted = false, playerOneTurn = false, playerTwoTurn = false;
     private Pane createContent(){
         Pane root = new Pane();
         root.setPrefSize(width*tileSize,height*tileSize + 100);
@@ -70,8 +76,69 @@ public class SnakeLadder extends Application {
         diceLabel.setTranslateY(infoLine);
         diceLabel.setTranslateX(150);
 
+        playerOne = new Player(tileSize, Color.BLACK,"NA");
+        playerTwo = new Player(tileSize - 5,Color.WHITE,"NA");
+
+        //Player Action
+        playerOneButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                if(gameStarted){
+                    if(playerOneTurn){
+                        int diceValue = dice.getDiceRolledValue();
+                        diceLabel.setText("Dice Value : "+diceValue);
+                        playerOne.movePlayer(diceValue);
+
+                        playerOneTurn = false;
+                        playerOneButton.setDisable(true);
+                        playerOneLabel.setText("");
+
+                        playerTwoTurn = true;
+                        playerTwoButton.setDisable(false);
+                        playerTwoLabel.setText("Your Turn : " +playerTwo.getName());
+                    }
+                }
+            }
+        });
+
+        playerTwoButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                if(gameStarted){
+                    if(playerTwoTurn){
+                        int diceValue = dice.getDiceRolledValue();
+                        diceLabel.setText("Dice Value : "+diceValue);
+                        playerTwo.movePlayer(diceValue);
+
+                        playerOneTurn = true;
+                        playerOneButton.setDisable(false);
+                        playerOneLabel.setText("Your Turn : " +playerTwo.getName());
+
+                        playerTwoTurn = true;
+                        playerTwoButton.setDisable(false);
+                        playerTwoLabel.setText("");
+                    }
+                }
+            }
+        });
+
+        startButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                gameStarted = true;
+                diceLabel.setText("Game Started");
+                startButton.setDisable(true);
+                playerOneTurn = true;
+                playerOneLabel.setText("Your Turn : "+playerOne.getName());
+                playerTwoTurn = false;
+                playerTwoLabel.setText("");
+                playerTwoButton.setDisable(true);
+            }
+        });
+
         root.getChildren().addAll(playerOneButton,playerTwoButton,startButton,
-                playerOneLabel,playerTwoLabel,diceLabel
+                playerOneLabel,playerTwoLabel,diceLabel,
+                playerOne.getCoin(),playerTwo.getCoin()
         );
         return root;
     }

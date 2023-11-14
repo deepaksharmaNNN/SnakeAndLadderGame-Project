@@ -11,7 +11,8 @@ public class Player {
     public Player(int tileSize, Color coinColor, String playerName){
         coin = new Circle(tileSize/2);
         coin.setFill(coinColor);
-        currentPosition = 1;
+        currentPosition = 0;
+        movePlayer(1);
         name = playerName;
     }
     public void movePlayer(int diceValue){
