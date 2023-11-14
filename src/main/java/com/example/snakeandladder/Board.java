@@ -13,7 +13,7 @@ public class Board {
         populateSnakeladder();
     }
     public int getNewPosition(int currentPosition){
-        if (currentPosition >= 0 && currentPosition <= 100) {
+        if (currentPosition > 0 && currentPosition <= 100) {
             return snakeLadderPosition.get(currentPosition);
         }
         return -1;

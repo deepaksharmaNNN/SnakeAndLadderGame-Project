@@ -37,23 +37,24 @@ public class Player {
                 sequentialTransition.play();
             }
         }
-
-/*
-        int x = gameBoard.getXCoordinates(currentPosition);
-        int y = gameBoard.getYCoordinates(currentPosition);
-
-        coin.setTranslateX(x);
-        coin.setTranslateY(y);
-*/
-
     }
 
     private TranslateTransition translateAnimation(int diceValue){
-        TranslateTransition animate = new TranslateTransition(Duration.millis(200*diceValue),coin);
+        TranslateTransition animate = new TranslateTransition(Duration.millis(10*diceValue + 200),coin);
         animate.setToX(gameBoard.getXCoordinates(currentPosition));
         animate.setToY(gameBoard.getYCoordinates(currentPosition));
         animate.setAutoReverse(false);
         return animate;
+    }
+    public void startingPosition(){
+        currentPosition = 0;
+        movePlayer(1);
+    }
+    boolean isWinner(){
+        if(currentPosition == 100){
+            return true;
+        }
+        return false;
     }
     public Circle getCoin() {
         return coin;
