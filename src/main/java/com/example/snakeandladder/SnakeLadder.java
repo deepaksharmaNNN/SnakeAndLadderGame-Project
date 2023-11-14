@@ -3,6 +3,7 @@ package com.example.snakeandladder;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -12,176 +13,117 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class SnakeLadder extends Application {
-    public static final int tileSize = 60 , height = 10 , width = 10;
-    public static final int buttonLine = height*tileSize + 50 , infoLine = buttonLine - 30;
-    private static Dice dice = new Dice();
-    private Player playerOne,playerTwo;
-    private boolean gameStarted = false, playerOneTurn = false, playerTwoTurn = false;
-    private Pane createContent(){
-        Pane root = new Pane();
-        root.setPrefSize(width*tileSize,height*tileSize + 100);
 
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                Tile tile = new Tile(tileSize);
+    public final int  tileSize = 40;
+    int height = 10;
+    int width = 10;
+
+    int diceValue;
+
+    int yLine = 430;
+    Group tileGroup = new Group();
+
+    Player playerOne, playerTow;
+
+    Label randResult;
+
+    boolean gameStart = true, turnOnePlayer = true, turnTwoPlayer = false;
+    public Pane createContent(){
+        Pane root = new Pane();
+        root.setPrefSize(width*tileSize, height*tileSize+80);
+        root.getChildren().addAll(tileGroup);
+
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                Tile tile = new Tile(tileSize,tileSize);
                 tile.setTranslateX(j*tileSize);
                 tile.setTranslateY(i*tileSize);
-                root.getChildren().add(tile);
+                tileGroup.getChildren().addAll(tile);
             }
         }
+        // add label
+        randResult = new Label("Start the Game");
+        randResult.setTranslateX(150);
+        randResult.setTranslateY(yLine-20);
 
-        ImageView board = new ImageView();
-        try {
-            File file = new File("D:/Projects/SnakeAndLadder/src/main/img.png");
-            Image img = new Image(new FileInputStream(file));
-            board.setImage(img);
-            board.setFitHeight(height * tileSize);
-            board.setFitWidth(width * tileSize);
 
-            root.getChildren().add(board);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        //Buttons
+        //add 3 buttons
+
         Button playerOneButton = new Button("Player One");
-        Button playerTwoButton = new Button("Player Two");
-        Button startButton = new Button("Start");
-
-        playerOneButton.setTranslateY(buttonLine);
-        playerOneButton.setTranslateX(50);
-        playerOneButton.setDisable(true);
-
-        playerTwoButton.setTranslateY(buttonLine);
-        playerTwoButton.setTranslateX(400);
-        playerTwoButton.setDisable(true);
-
-        startButton.setTranslateY(buttonLine);
-        startButton.setTranslateX(270);
-
-        //info Display
-        Label playerOneLabel = new Label("");
-        Label playerTwoLabel = new Label("");
-        Label diceLabel = new Label("Start The Game !");
-
-        playerOneLabel.setTranslateY(infoLine);
-        playerOneLabel.setTranslateX(50);
-
-        playerTwoLabel.setTranslateY(infoLine);
-        playerTwoLabel.setTranslateX(400);
-
-        diceLabel.setTranslateY(infoLine);
-        diceLabel.setTranslateX(250);
-
-        playerOne = new Player(tileSize, Color.BLACK,"Luffy");
-        playerTwo = new Player(tileSize - 5,Color.WHITE,"Zoro");
-
-        //Player Action
+        playerOneButton.setTranslateX(20);
+        playerOneButton.setTranslateY(yLine);
         playerOneButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                if(gameStarted){
-                    if(playerOneTurn){
-                        int diceValue = dice.getDiceRolledValue();
-                        diceLabel.setText("Dice Value : "+diceValue);
+                if(gameStart){
+                    if(turnOnePlayer){
+                        getDiceValue();
                         playerOne.movePlayer(diceValue);
-                        //Wining Condition
-                        if(playerOne.isWinner()){
-                            diceLabel.setText("Winner is Player One");
-                            playerOneTurn = false;
-                            playerOneButton.setDisable(true);
-                            playerOneLabel.setText("");
-
-                            playerTwoTurn = true;
-                            playerTwoButton.setDisable(true);
-                            playerTwoLabel.setText("");
-
-                            startButton.setDisable(false);
-                            startButton.setText("Restart !");
-                            gameStarted = false;
-
-
-                        }else{
-                            playerOneTurn = false;
-                            playerOneButton.setDisable(true);
-                            playerOneLabel.setText("");
-
-                            playerTwoTurn = true;
-                            playerTwoButton.setDisable(false);
-                            playerTwoLabel.setText("Your Turn : " +playerTwo.getName());
-                        }
+                        playerOne.playerAtSnakeOrLadder();
+                        turnOnePlayer = false;
+                        turnTwoPlayer = true;
                     }
                 }
+
             }
         });
 
+        Button gameButton = new Button("Start Game");
+        gameButton.setTranslateX(160);
+        gameButton.setTranslateY(yLine);
+
+        Button playerTwoButton = new Button("Player Two");
+        playerTwoButton.setTranslateX(300);
+        playerTwoButton.setTranslateY(yLine);
         playerTwoButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                if(gameStarted){
-                    if(playerTwoTurn){
-                        int diceValue = dice.getDiceRolledValue();
-                        diceLabel.setText("Dice Value : "+diceValue);
-                        playerTwo.movePlayer(diceValue);
-                        //Wining Condition
-                        if(playerTwo.isWinner()){
-                            diceLabel.setText("Winner is Player Two");
-                            playerOneTurn = false;
-                            playerOneButton.setDisable(true);
-                            playerOneLabel.setText("");
-
-                            playerTwoTurn = true;
-                            playerTwoButton.setDisable(true);
-                            playerTwoLabel.setText("");
-
-                            startButton.setDisable(false);
-                            startButton.setText("Restart !");
-                        }else{
-                            playerOneTurn = true;
-                            playerOneButton.setDisable(false);
-                            playerOneLabel.setText("Your Turn : " +playerTwo.getName());
-
-                            playerTwoTurn = false;
-                            playerTwoButton.setDisable(true);
-                            playerTwoLabel.setText("");
-                        }
+                if(gameStart){
+                    if(turnTwoPlayer){
+                        getDiceValue();
+                        playerTow.movePlayer(diceValue);
+                        playerTow.playerAtSnakeOrLadder();
+                        turnOnePlayer = true;
+                        turnTwoPlayer = false;
                     }
                 }
+
             }
         });
 
-        startButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                gameStarted = true;
-                diceLabel.setText("Game Started");
-                startButton.setDisable(true);
-                playerOneTurn = true;
-                playerOneLabel.setText("Your Turn : "+playerOne.getName());
-                playerOneButton.setDisable(false);
-                playerOne.startingPosition();
-                playerTwoTurn = false;
-                playerTwoLabel.setText("");
-                playerTwoButton.setDisable(true);
-                playerTwo.startingPosition();
-            }
-        });
+        playerOne = new Player(tileSize, Color.BLACK);
+        playerTow = new Player(tileSize-10, Color.WHITE);
 
-        root.getChildren().addAll(playerOneButton,playerTwoButton,startButton,
-                playerOneLabel,playerTwoLabel,diceLabel,
-                playerOne.getCoin(),playerTwo.getCoin()
+
+        Image img = new Image("file:D:/Projects/SnakeAndLadder/src/main/img.png");
+        ImageView boardImage = new ImageView();
+        boardImage.setImage(img);
+        boardImage.setFitWidth(tileSize*width);
+        boardImage.setFitHeight(tileSize*height);
+
+        tileGroup.getChildren().addAll(boardImage,
+                playerOneButton, gameButton,
+                playerTwoButton, randResult,
+                playerOne.getGamePiece(),
+                playerTow.getGamePiece()
         );
+
+
         return root;
     }
+
+    private void getDiceValue(){
+        diceValue = (int)(Math.random()*6+1);
+        randResult.setText(Integer.toString(diceValue));
+    }
+
     @Override
     public void start(Stage stage) throws IOException {
         Scene scene = new Scene(createContent());
-        stage.setTitle("Snake & Ladder !");
+        stage.setTitle("Snake and Ladder");
         stage.setScene(scene);
         stage.show();
     }
